@@ -1,0 +1,50 @@
+<link rel="stylesheet" href="https://generativeart.online/css/drawing-app.css">
+<head>
+  <title>emojis</title>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Noto+Serif+SC&display=swap");
+    body {
+      background-color: #FFFFFF;
+      color: #000000;
+      font-size: 30px;
+      line-height: 30px;
+      word-wrap: anywhere;
+      font-family: "Noto Serif SC";
+    }
+  </style>
+</head>
+
+<script src="https://cdn.jsdelivr.net/gh/netizenorg/netnet-standard-library/build/nn.min.js"></script>
+<script>
+/* global nn */  
+
+let fps = 1000 / 1
+
+const draw = function(){
+  requestAnimationFrame(draw)
+  //setTimeout(draw, fps)
+  const emojis = ['🇦🇴','🇧🇫','🇧🇮','🇧🇯','🇧🇼','🇨🇩','🇨🇫','🇨🇬','🇨🇮','🇨🇲','🇨🇻','🇩🇯','🇩🇿','🇪🇬','🇪🇭','🇪🇷','🇪🇹','🇬🇦','🇬🇭','🇬🇲','🇬🇳','🇬🇶','🇬🇼','🇰🇪','🇰🇲','🇱🇷','🇱🇸','🇱🇾','🇲🇦','🇲🇬','🇲🇱','🇲🇷','🇲🇺','🇲🇼','🇲🇿','🇳🇦','🇳🇪','🇳🇬','🇷🇼','🇸🇨','🇸🇩','🇸🇱','🇸🇳','🇸🇴','🇸🇸','🇸🇿','🇹🇩','🇹🇬','🇹🇳','🇹🇿','🇺🇬','🇿🇦','🇿🇲','🇿🇼']
+  
+  if (nn.mouseDown){
+    const e = nn.create('span')
+      .content(nn.random(emojis))
+      .css({
+      fontSize: Math.random() * 80 + 20,
+      position: "absolute",
+      left: nn.random(nn.width),
+      top: nn.random(nn.height)
+    })
+      .addTo('body')
+      .on("mousemove", () => e.remove())
+  }
+}
+
+/*const del = function(){
+  e.remove()
+}*/
+
+
+nn.on("load", draw)  
+// nn.on("click", del)
+  
+</script>
