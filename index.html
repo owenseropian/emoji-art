@@ -6,8 +6,6 @@
     body {
       background-color: #FFFFFF;
       color: #000000;
-      font-size: 30px;
-      line-height: 30px;
       word-wrap: anywhere;
       font-family: "Noto Serif SC";
     }
@@ -19,23 +17,59 @@
 /* global nn */  
 
 let fps = 1000 / 1
+let delay = 1000 * 2
+let mouseDown = false
+
+const red = ['🟥', '🔴', '❤️', '🅾️', '🇭🇰', '🐙']
+const orange = ['🟧', '🟠', '🧡', '☢️', '🦀']
+const yellow = ['🟨', '🟡', '💛', '⚠️', '⭐', '🌕']
+const green = ['🟩', '🟢', '💚', '🇸🇦', '🍀', '🐢']
+const blue = ['🟦', '🔵', '💙', '🈂️', '🇪🇺', '🪼', '🌀']
+const purple = ['🟪', '🟣', '💜', '🛐', '☂️']
+const white = ['⬜', '⚪', '🤍', '🇨🇾', '☁️']
+const black = ['⬛', '⚫', '🖤', '🎱', '🐾']
+
+const colors = [red, orange, yellow, green, blue, purple, white, black]
+
+let color_index = Math.floor(nn.random(colors.length))
+let color = nn.random(color_index)
+
+const createFlag = function(color, x = nn.random(nn.width), y = nn.random(nn.height)) {
+  const flags = ['🇦🇴','🇧🇫','🇧🇮','🇧🇯','🇧🇼','🇨🇩','🇨🇫','🇨🇬','🇨🇮','🇨🇲','🇨🇻','🇩🇯','🇩🇿','🇪🇬','🇪🇭','🇪🇷','🇪🇹','🇬🇦','🇬🇭','🇬🇲','🇬🇳','🇬🇶','🇬🇼','🇰🇪','🇰🇲','🇱🇷','🇱🇸','🇱🇾','🇲🇦','🇲🇬','🇲🇱','🇲🇷','🇲🇺','🇲🇼','🇲🇿','🇳🇦','🇳🇪','🇳🇬','🇷🇼','🇸🇨','🇸🇩','🇸🇱','🇸🇳','🇸🇴','🇸🇸','🇸🇿','🇹🇩','🇹🇬','🇹🇳','🇹🇿','🇺🇬','🇿🇦','🇿🇲','🇿🇼']
+  
+  let fontSize = Math.random() * 80 + 20
+  
+  const e = nn.create('span')
+    .content(nn.random(color))
+    .css({
+    fontSize: fontSize,
+    position: "absolute",
+    left: x - fontSize / 2,
+    top: y - fontSize * 2/3
+  })
+    .addTo('body')
+    .on("mousemove", () => console.log(this.fontSize))
+  
+  setTimeout(() => {e.remove()}, delay)
+  
+}
+
+const changeColor = function(){
+  let rand = Math.floor(Math.random() * 100)
+  if (rand < 5){color_index++}
+  else if (rand > 95){color_index--}
+  console.log(color_index)
+  color_index %= colors.length
+  if (color_index < 0){color_index = colors.length - 1}
+  color = colors[color_index]
+}
 
 const draw = function(){
-  requestAnimationFrame(draw)
   //setTimeout(draw, fps)
-  const emojis = ['🇦🇴','🇧🇫','🇧🇮','🇧🇯','🇧🇼','🇨🇩','🇨🇫','🇨🇬','🇨🇮','🇨🇲','🇨🇻','🇩🇯','🇩🇿','🇪🇬','🇪🇭','🇪🇷','🇪🇹','🇬🇦','🇬🇭','🇬🇲','🇬🇳','🇬🇶','🇬🇼','🇰🇪','🇰🇲','🇱🇷','🇱🇸','🇱🇾','🇲🇦','🇲🇬','🇲🇱','🇲🇷','🇲🇺','🇲🇼','🇲🇿','🇳🇦','🇳🇪','🇳🇬','🇷🇼','🇸🇨','🇸🇩','🇸🇱','🇸🇳','🇸🇴','🇸🇸','🇸🇿','🇹🇩','🇹🇬','🇹🇳','🇹🇿','🇺🇬','🇿🇦','🇿🇲','🇿🇼']
   
   if (nn.mouseDown){
-    const e = nn.create('span')
-      .content(nn.random(emojis))
-      .css({
-      fontSize: Math.random() * 80 + 20,
-      position: "absolute",
-      left: nn.random(nn.width),
-      top: nn.random(nn.height)
-    })
-      .addTo('body')
-      .on("mousemove", () => e.remove())
+    changeColor()
+    createFlag(color, nn.mouseX, nn.mouseY)
   }
 }
 
@@ -44,7 +78,9 @@ const draw = function(){
 }*/
 
 
-nn.on("load", draw)  
+nn.on("mousedown", () => mouseDown = true)  
+nn.on("mousemove", () => draw()) 
+nn.on("mouseup", () => mouseDown = false)  
 // nn.on("click", del)
   
 </script>
