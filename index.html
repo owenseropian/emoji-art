@@ -16,9 +16,10 @@
 <script>
 /* global nn */  
 
-let fps = 1000 / 1
-let delay = 1000 * 2
 let mouseDown = false
+
+let remove = true
+let delay = 1000 * 2
 
 const red = ['🟥', '🔴', '❤️', '🅾️', '🇭🇰', '🐙']
 const orange = ['🟧', '🟠', '🧡', '☢️', '🦀']
@@ -50,8 +51,9 @@ const createFlag = function(color, x = nn.random(nn.width), y = nn.random(nn.hei
     .addTo('body')
     .on("mousemove", () => console.log(this.fontSize))
   
-  setTimeout(() => {e.remove()}, delay)
-  
+  if (remove){
+    setTimeout(() => {e.remove()}, delay)
+  }
 }
 
 const changeColor = function(){
@@ -64,19 +66,12 @@ const changeColor = function(){
   color = colors[color_index]
 }
 
-const draw = function(){
-  //setTimeout(draw, fps)
-  
+const draw = function(){  
   if (nn.mouseDown){
     changeColor()
     createFlag(color, nn.mouseX, nn.mouseY)
   }
 }
-
-/*const del = function(){
-  e.remove()
-}*/
-
 
 nn.on("mousedown", () => mouseDown = true)  
 nn.on("mousemove", () => draw()) 
