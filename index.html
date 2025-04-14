@@ -16,8 +16,6 @@
 <script>
 /* global nn */  
 
-let mouseDown = false
-
 let remove = true
 let delay = 1000 * 2
 
@@ -33,26 +31,49 @@ const black = ['⬛', '⚫', '🖤', '🎱', '🐾']
 const colors = [red, orange, yellow, green, blue, purple, white, black]
 
 let color_index = Math.floor(nn.random(colors.length))
-let color = nn.random(color_index)
+let color = colors[color_index]
 
-const createFlag = function(color, x = nn.random(nn.width), y = nn.random(nn.height)) {
-  const flags = ['🇦🇴','🇧🇫','🇧🇮','🇧🇯','🇧🇼','🇨🇩','🇨🇫','🇨🇬','🇨🇮','🇨🇲','🇨🇻','🇩🇯','🇩🇿','🇪🇬','🇪🇭','🇪🇷','🇪🇹','🇬🇦','🇬🇭','🇬🇲','🇬🇳','🇬🇶','🇬🇼','🇰🇪','🇰🇲','🇱🇷','🇱🇸','🇱🇾','🇲🇦','🇲🇬','🇲🇱','🇲🇷','🇲🇺','🇲🇼','🇲🇿','🇳🇦','🇳🇪','🇳🇬','🇷🇼','🇸🇨','🇸🇩','🇸🇱','🇸🇳','🇸🇴','🇸🇸','🇸🇿','🇹🇩','🇹🇬','🇹🇳','🇹🇿','🇺🇬','🇿🇦','🇿🇲','🇿🇼']
-  
-  let fontSize = Math.random() * 80 + 20
-  
+const removeEmoji = function(e){
+  if (remove){
+    setTimeout(() => {e.remove()}, delay)
+  }
+}
+
+const makeEmoji = function(fontSize, x, y){
   const e = nn.create('span')
     .content(nn.random(color))
     .css({
     fontSize: fontSize,
     position: "absolute",
-    left: x - fontSize / 2,
-    top: y - fontSize * 2/3
+    left: x,
+    top: y
   })
     .addTo('body')
     .on("mousemove", () => console.log(this.fontSize))
+  return e
+}
+
+const createFlag = function(color, x = nn.random(nn.width), y = nn.random(nn.height)) {
+  const flags = ['🇦🇴','🇧🇫','🇧🇮','🇧🇯','🇧🇼','🇨🇩','🇨🇫','🇨🇬','🇨🇮','🇨🇲','🇨🇻','🇩🇯','🇩🇿','🇪🇬','🇪🇭','🇪🇷','🇪🇹','🇬🇦','🇬🇭','🇬🇲','🇬🇳','🇬🇶','🇬🇼','🇰🇪','🇰🇲','🇱🇷','🇱🇸','🇱🇾','🇲🇦','🇲🇬','🇲🇱','🇲🇷','🇲🇺','🇲🇼','🇲🇿','🇳🇦','🇳🇪','🇳🇬','🇷🇼','🇸🇨','🇸🇩','🇸🇱','🇸🇳','🇸🇴','🇸🇸','🇸🇿','🇹🇩','🇹🇬','🇹🇳','🇹🇿','🇺🇬','🇿🇦','🇿🇲','🇿🇼']
   
-  if (remove){
-    setTimeout(() => {e.remove()}, delay)
+  let fontSize = Math.random() * 20 + 80
+  
+  const e = makeEmoji(fontSize, x - fontSize / 2, y - fontSize * 2/3)
+  
+  removeEmoji(e)
+}
+
+const createCircle = function(color, x = nn.random(nn.width), y = nn.random(nn.height)){
+  
+  let fontSize = Math.random() * 20 + 10
+  
+  for (let i = 0; i < 4; i++){
+    for (let j = 0; j < i*5; j++){
+      let radius = i*20
+      let angle = (2*Math.PI)/(i*5)*j
+      const e = makeEmoji(fontSize, x - fontSize / 2 + Math.cos(angle) * radius, y - fontSize * 2/3 + Math.sin(angle) * radius)
+      removeEmoji(e)
+    }
   }
 }
 
@@ -73,9 +94,8 @@ const draw = function(){
   }
 }
 
-nn.on("mousedown", () => mouseDown = true)  
 nn.on("mousemove", () => draw()) 
-nn.on("mouseup", () => mouseDown = false)  
+nn.on("keypress", () => createCircle(color, nn.mouseX, nn.mouseY))
 // nn.on("click", del)
   
 </script>
