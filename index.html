@@ -15,13 +15,16 @@
 <script src="https://cdn.jsdelivr.net/gh/netizenorg/netnet-standard-library/build/nn.min.js"></script>
 <script>
 /* global nn */  
+  
+//click for emojis
+//press key for circle
 
 let remove = true
 let delay = 1000 * 2
 
 const red = ['🟥', '🔴', '❤️', '🅾️', '🇭🇰', '🐙']
-const orange = ['🟧', '🟠', '🧡', '☢️', '🦀']
-const yellow = ['🟨', '🟡', '💛', '⚠️', '⭐', '🌕']
+const orange = ['🟧', '🟠', '🧡', '☢️', '🦀', '🔸']
+const yellow = ['🟨', '🟡', '💛', '⚠️', '⭐', '🌕', '🔆']
 const green = ['🟩', '🟢', '💚', '🇸🇦', '🍀', '🐢']
 const blue = ['🟦', '🔵', '💙', '🈂️', '🇪🇺', '🪼', '🌀']
 const purple = ['🟪', '🟣', '💜', '🛐', '☂️']
@@ -53,9 +56,7 @@ const makeEmoji = function(fontSize, x, y){
   return e
 }
 
-const createFlag = function(color, x = nn.random(nn.width), y = nn.random(nn.height)) {
-  const flags = ['🇦🇴','🇧🇫','🇧🇮','🇧🇯','🇧🇼','🇨🇩','🇨🇫','🇨🇬','🇨🇮','🇨🇲','🇨🇻','🇩🇯','🇩🇿','🇪🇬','🇪🇭','🇪🇷','🇪🇹','🇬🇦','🇬🇭','🇬🇲','🇬🇳','🇬🇶','🇬🇼','🇰🇪','🇰🇲','🇱🇷','🇱🇸','🇱🇾','🇲🇦','🇲🇬','🇲🇱','🇲🇷','🇲🇺','🇲🇼','🇲🇿','🇳🇦','🇳🇪','🇳🇬','🇷🇼','🇸🇨','🇸🇩','🇸🇱','🇸🇳','🇸🇴','🇸🇸','🇸🇿','🇹🇩','🇹🇬','🇹🇳','🇹🇿','🇺🇬','🇿🇦','🇿🇲','🇿🇼']
-  
+const createOneEmoji = function(color, x = nn.random(nn.width), y = nn.random(nn.height)) {
   let fontSize = Math.random() * 20 + 80
   
   const e = makeEmoji(fontSize, x - fontSize / 2, y - fontSize * 2/3)
@@ -67,9 +68,11 @@ const createCircle = function(color, x = nn.random(nn.width), y = nn.random(nn.h
   
   let fontSize = Math.random() * 20 + 10
   
+  let mult = Math.random() * 20 + 10 
+  
   for (let i = 0; i < 4; i++){
     for (let j = 0; j < i*5; j++){
-      let radius = i*20
+      let radius = i*mult
       let angle = (2*Math.PI)/(i*5)*j
       const e = makeEmoji(fontSize, x - fontSize / 2 + Math.cos(angle) * radius, y - fontSize * 2/3 + Math.sin(angle) * radius)
       removeEmoji(e)
@@ -90,7 +93,7 @@ const changeColor = function(){
 const draw = function(){  
   if (nn.mouseDown){
     changeColor()
-    createFlag(color, nn.mouseX, nn.mouseY)
+    createOneEmoji(color, nn.mouseX, nn.mouseY)
   }
 }
 
